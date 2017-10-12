@@ -1,0 +1,11 @@
+diff -ru moby-17.05.0-ce.orig/pkg/mount/mounter_linux_test.go moby-17.05.0-ce/pkg/mount/mounter_linux_test.go
+--- moby-17.05.0-ce.orig/pkg/mount/mounter_linux_test.go	2017-10-11 00:56:41.952450812 +0000
++++ moby-17.05.0-ce/pkg/mount/mounter_linux_test.go	2017-10-11 00:57:24.498911179 +0000
+@@ -11,6 +11,7 @@
+ )
+ 
+ func TestMount(t *testing.T) {
++        t.Skip("not appropriate for a buildroot environment")
+ 	if os.Getuid() != 0 {
+ 		t.Skip("not root tests would fail")
+ 	}

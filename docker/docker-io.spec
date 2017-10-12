@@ -1,8 +1,9 @@
-%define _buildid .59
+%define _buildid .01
 
 %bcond_with systemd  # without
 %bcond_without tests # with
 %bcond_without seccomp  # with
+
 # By default, we apply patches to disable tests that don't
 # pass in a buildroot environment.
 %bcond_with all_tests # without
@@ -32,16 +33,16 @@
 # The commit ids for containerd, tini, libnetwork, and runc here are taken from
 # the corresponding variables in the upstream Dockerfile used to construct the
 # build container image.
-# https://github.com/moby/moby/blob/v17.03.2-ce/hack/dockerfile/binaries-commits
+# https://github.com/moby/moby/blob/v17.05.0-ce/hack/dockerfile/binaries-commits
 %global containerd_import_path  github.com/docker/containerd
-%global containerd_commit       4ab9917febca54791c5f071a9d1f404867857fcc
+%global containerd_commit       9048e5e50717ea4497b757314bad98ea3763c145
 %global containerd_shortcommit  %(c=%{containerd_commit}; echo ${c:0:7})
 %global runc_import_path        github.com/opencontainers/runc
-%global runc_commit             54296cf40ad8143b62dbcaa1d90e520a2136ddfe
+%global runc_commit             9c2d8d184e5da67c95d601382adf14862e4f2228
 %global runc_shortcommit        %(c=%{runc_commit}; echo ${c:0:7})
 # libnetwork provides the docker-proxy binary.
 %global libnetwork_import_path    github.com/docker/libnetwork
-%global libnetwork_commit         0f534354b813003a754606689722fe253101bc4e
+%global libnetwork_commit         7b2b1feb1de4817d522cc372af149ff48d25028e
 %global libnetwork_shortcommit    %(c=%{libnetwork_commit}; echo ${c:0:7})
 # tini provides the "docker-init" binary
 %global tini_import_path          github.com/krallin/tini
@@ -55,8 +56,8 @@
 %if %{with seccomp}
 %global         build_tags %{?build_tags} seccomp
 %endif
-%global         docker_version 17.03.2-ce
-%global         docker_rpm_version  17.03.2ce
+%global         docker_version 17.05.0-ce
+%global         docker_rpm_version  17.05.0ce
 %global         docker_version_suffix %{nil}
 Name:           docker
 Version:        %{docker_rpm_version}
@@ -66,7 +67,7 @@ License:        ASL 2.0 and MIT and BSD and MPLv2.0 and WTFPL
 URL:            http://www.docker.com
 # only x86_64 for now: https://github.com/docker/docker/issues/136
 ExclusiveArch:  x86_64
-Source0:        https://github.com/docker/docker/archive/docker-%{docker_version}%{docker_version_suffix}.tar.gz
+Source0:        https://github.com/moby/moby/archive/v%{docker_version}%{docker_version_suffix}.tar.gz
 Source1:        docker.service
 Source2:        docker.sysconfig
 Source3:        docker-storage.sysconfig
@@ -74,15 +75,16 @@ Source4:        https://%{containerd_import_path}/archive/%{containerd_commit}/c
 Source5:        https://%{runc_import_path}/archive/%{runc_commit}/runc-%{runc_shortcommit}.tar.gz
 Source6:        https://%{libnetwork_import_path}/archive/%{libnetwork_commit}/libnetwork-%{libnetwork_shortcommit}.tar.gz
 Source7:        https://%{tini_import_path}/archive/%{tini_commit}/tini-%{tini_shortcommit}.tar.gz
-# Amazon-provided sources
-Source2000:     docker-%{docker_version}%{docker_version_suffix}-man-pages.tar
+# Custom-provided sources
+Source2000:     http://jaeger.morpheus.net/linux/crux/files/docker-man-pages-17.05.0-ce.tar.xz
 
+# Custom-provided patches
+Patch9999:      docker-1.17.05.0-skip-mounter-test.patch
 # Amazon-provided patches
 Patch2001:      docker-1.12.3-sysvinit-use-nohup.patch
 Patch2002:      docker-1.12.3-sysvinit-add-storage-opts.patch
 Patch2004:      docker-1.7.1-sysvinit-increase-daemon-maxfiles.patch
 Patch2007:      docker-1.9.0-sysvinit-stop-before-network.patch
-Patch2009:      docker-1.11.1-runc-libcontainer-apply_nosystemd.patch
 # Patch out support for the P224 curve in Certificate Transparency, it's
 # removed from our openssl library
 Patch2010:      docker-1.12.3-CT-remove-P224-curve.patch
@@ -92,8 +94,6 @@ Patch2011:      docker-1.12.3-sysvinit-configurable-start-timeout.patch
 # Skip daemon tests that try to mount and unmount volumes
 Patch2101:      docker-1.11.1-skip-daemon-tests-that-mount-volumes.patch
 # The graphdriver/devmapper tests try to create and mount a loopback fs
-Patch2103:      docker-1.9.0-skip-devmapper-tests.patch
-# Skip graphdriver/vfs tests that require root privileges and mutate the filesystem
 Patch2104:      docker-1.9.0-skip-mutating-vfs-tests.patch
 # Skip pkg/archive and pkg/chrootarchive tests that require root privileges
 Patch2106:      docker-1.11.1-skip-pkg-archive-tests-that-require-root.patch
@@ -295,7 +295,7 @@ and tests on a laptop will run at scale, in production*, on VMs, bare-metal
 servers, OpenStack clusters, public instances, or combinations of the above.
 
 %prep
-%setup -q -n %{project}-%{docker_version}%{docker_version_suffix}
+%setup -q -n moby-%{docker_version}%{docker_version_suffix}
 # Unpack runc and containerd
 tar xvf %SOURCE4
 tar xvf %SOURCE5
@@ -306,13 +306,12 @@ tar xvf %SOURCE7
 %patch2002 -p1
 %patch2004 -p1
 %patch2007 -p1
-%patch2009 -p1
 %endif
 %patch2010 -p1
 %patch2011 -p1
 %if %{without all_tests}
+%patch9999 -p1
 %patch2101 -p1
-%patch2103 -p1
 %patch2104 -p1
 %patch2106 -p1
 %patch2107 -p1
@@ -760,6 +759,10 @@ keyfile="/etc/docker/key.json"
 %{_datadir}/vim/vimfiles/syntax/dockerfile.vim
 
 %changelog
+* Thu Oct 12 2017 Ben Lieberman <blieberman@wanderu.com>
+- Updating spec file for 17.05.0-ce
+- Adding appropriate patches for AWS AMI EC2 build env for 17.05.0-ce
+
 * Mon Jul 31 2017 Noah Meyerhans <nmeyerha@amazon.com>
 - Update comments in the spec file to more accurately reflect the provenance of some patches
 
@@ -1388,10 +1391,9 @@ keyfile="/etc/docker/key.json"
 
 * Mon Aug 26 2013 Lokesh Mandvekar <lsm5@redhat.com> 0.5.3-2
 - Github packaging
-- Deps not downloaded at build time courtesy Elan RuusamÃ¤e
+- Deps not downloaded at build time courtesy Elan Ruusamäe
 - Manpage and other docs installed
 
 * Fri Aug 23 2013 Lokesh Mandvekar <lsm5@redhat.com> 0.5.3-1
 - Initial fedora package
-- Some credit to Elan RuusamÃ¤e (glen@pld-linux.org)
-
+- Some credit to Elan Ruusamäe (glen@pld-linux.org)
