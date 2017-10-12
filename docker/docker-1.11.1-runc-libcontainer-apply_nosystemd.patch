@@ -1,0 +1,29 @@
+Index: docker-17.03.2-ce/runc-54296cf40ad8143b62dbcaa1d90e520a2136ddfe/libcontainer/cgroups/systemd/apply_nosystemd.go
+===================================================================
+--- docker-17.03.2-ce.orig/runc-54296cf40ad8143b62dbcaa1d90e520a2136ddfe/libcontainer/cgroups/systemd/apply_nosystemd.go
++++ docker-17.03.2-ce/runc-54296cf40ad8143b62dbcaa1d90e520a2136ddfe/libcontainer/cgroups/systemd/apply_nosystemd.go
+@@ -1,4 +1,4 @@
+-// +build !linux
++// +build linux
+ 
+ package systemd
+ 
+@@ -43,7 +43,7 @@ func (m *Manager) GetStats() (*cgroups.S
+ }
+ 
+ func (m *Manager) Set(container *configs.Config) error {
+-	return nil, fmt.Errorf("Systemd not supported")
++	return fmt.Errorf("Systemd not supported")
+ }
+ 
+ func (m *Manager) Freeze(state configs.FreezerState) error {
+Index: docker-17.03.2-ce/runc-54296cf40ad8143b62dbcaa1d90e520a2136ddfe/libcontainer/cgroups/systemd/apply_systemd.go
+===================================================================
+--- docker-17.03.2-ce.orig/runc-54296cf40ad8143b62dbcaa1d90e520a2136ddfe/libcontainer/cgroups/systemd/apply_systemd.go
++++ docker-17.03.2-ce/runc-54296cf40ad8143b62dbcaa1d90e520a2136ddfe/libcontainer/cgroups/systemd/apply_systemd.go
+@@ -1,4 +1,4 @@
+-// +build linux
++// +build ignore
+ 
+ package systemd
+ 

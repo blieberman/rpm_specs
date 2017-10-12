@@ -1,0 +1,55 @@
+Index: docker-17.03.2-ce/tini-949e6facb77383876aeff8a6944dde66b3089574/CMakeLists.txt
+===================================================================
+--- docker-17.03.2-ce.orig/tini-949e6facb77383876aeff8a6944dde66b3089574/CMakeLists.txt
++++ docker-17.03.2-ce/tini-949e6facb77383876aeff8a6944dde66b3089574/CMakeLists.txt
+@@ -13,27 +13,32 @@ if(MINIMAL)
+ 	add_definitions(-DTINI_MINIMAL=1)
+ endif()
+ 
+-# Extract git version and dirty-ness
+-execute_process (
+-  COMMAND git --git-dir "${PROJECT_SOURCE_DIR}/.git" --work-tree "${PROJECT_SOURCE_DIR}" log -n 1 --date=local --pretty=format:%h
+-  WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+-  RESULT_VARIABLE git_version_check_ret
+-  OUTPUT_VARIABLE tini_VERSION_GIT
+-)
+-
+-execute_process(
+-  COMMAND git --git-dir "${PROJECT_SOURCE_DIR}/.git" --work-tree "${PROJECT_SOURCE_DIR}" status --porcelain --untracked-files=no
+-  WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+-  OUTPUT_VARIABLE git_dirty_check_out
+-)
++if("$ENV{GIT_COMMIT_OVERRIDE}" EQUAL "")
+ 
+-if("${git_version_check_ret}" EQUAL 0)
+-  set(tini_VERSION_GIT " - git.${tini_VERSION_GIT}")
+-  if(NOT "${git_dirty_check_out}" STREQUAL "")
+-    set(tini_VERSION_GIT "${tini_VERSION_GIT}-dirty")
++  # Extract git version and dirty-ness
++  execute_process (
++    COMMAND git --git-dir "${PROJECT_SOURCE_DIR}/.git" --work-tree "${PROJECT_SOURCE_DIR}" log -n 1 --date=local --pretty=format:%h
++    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
++    RESULT_VARIABLE git_version_check_ret
++    OUTPUT_VARIABLE tini_VERSION_GIT
++  )
++
++  execute_process(
++    COMMAND git --git-dir "${PROJECT_SOURCE_DIR}/.git" --work-tree "${PROJECT_SOURCE_DIR}" status --porcelain --untracked-files=no
++    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
++    OUTPUT_VARIABLE git_dirty_check_out
++  )
++
++  if("${git_version_check_ret}" EQUAL 0)
++    set(tini_VERSION_GIT " - git.${tini_VERSION_GIT}")
++    if(NOT "${git_dirty_check_out}" STREQUAL "")
++      set(tini_VERSION_GIT "${tini_VERSION_GIT}-dirty")
++    endif()
++  else()
++    set(tini_VERSION_GIT "")
+   endif()
+ else()
+-  set(tini_VERSION_GIT "")
++  set(tini_VERSION_GIT " - git.$ENV{GIT_COMMIT_OVERRIDE}")
+ endif()
+ 
+ # Flags

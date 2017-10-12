@@ -1,0 +1,28 @@
+Index: docker-17.04.0-ce-rc1/pkg/idtools/idtools_unix_test.go
+===================================================================
+--- docker-17.04.0-ce-rc1.orig/pkg/idtools/idtools_unix_test.go
++++ docker-17.04.0-ce-rc1/pkg/idtools/idtools_unix_test.go
+@@ -17,6 +17,7 @@ type node struct {
+ }
+ 
+ func TestMkdirAllAs(t *testing.T) {
++    t.Skip("not appropriate for a buildroot environment")
+ 	dirName, err := ioutil.TempDir("", "mkdirall")
+ 	if err != nil {
+ 		t.Fatalf("Couldn't create temp dir: %v", err)
+@@ -77,6 +78,7 @@ func TestMkdirAllAs(t *testing.T) {
+ }
+ 
+ func TestMkdirAllNewAs(t *testing.T) {
++    t.Skip("not appropriate for a buildroot environment")
+ 
+ 	dirName, err := ioutil.TempDir("", "mkdirnew")
+ 	if err != nil {
+@@ -137,6 +139,7 @@ func TestMkdirAllNewAs(t *testing.T) {
+ }
+ 
+ func TestMkdirAs(t *testing.T) {
++    t.Skip("not appropriate for a buildroot environment")
+ 
+ 	dirName, err := ioutil.TempDir("", "mkdir")
+ 	if err != nil {

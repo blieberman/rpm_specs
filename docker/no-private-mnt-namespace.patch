@@ -1,0 +1,13 @@
+Index: docker-17.03.1-ce/contrib/init/sysvinit-redhat/docker
+===================================================================
+--- docker-17.03.1-ce.orig/contrib/init/sysvinit-redhat/docker
++++ docker-17.03.1-ce/contrib/init/sysvinit-redhat/docker
+@@ -70,7 +70,7 @@ start() {
+ 		prestart
+ 		printf "Starting $prog:\t"
+ 		echo "\n$(date)\n" >> $logfile
+-		"$unshare" -m -- nohup $exec ${OPTIONS} ${DOCKER_STORAGE_OPTIONS} >> $logfile 2>&1 &
++		nohup $exec ${OPTIONS} ${DOCKER_STORAGE_OPTIONS} >> $logfile 2>&1 &
+ 		pid=$!
+ 		touch $lockfile
+ 		tries=0

@@ -1,0 +1,31 @@
+Index: docker-17.04.0-ce-rc1/daemon/graphdriver/vfs/vfs_test.go
+===================================================================
+--- docker-17.04.0-ce-rc1.orig/daemon/graphdriver/vfs/vfs_test.go
++++ docker-17.04.0-ce-rc1/daemon/graphdriver/vfs/vfs_test.go
+@@ -17,21 +17,26 @@ func init() {
+ // This avoids creating a new driver for each test if all tests are run
+ // Make sure to put new tests between TestVfsSetup and TestVfsTeardown
+ func TestVfsSetup(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	graphtest.GetDriver(t, "vfs")
+ }
+ 
+ func TestVfsCreateEmpty(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	graphtest.DriverTestCreateEmpty(t, "vfs")
+ }
+ 
+ func TestVfsCreateBase(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	graphtest.DriverTestCreateBase(t, "vfs")
+ }
+ 
+ func TestVfsCreateSnap(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	graphtest.DriverTestCreateSnap(t, "vfs")
+ }
+ 
+ func TestVfsTeardown(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	graphtest.PutDriver(t)
+ }

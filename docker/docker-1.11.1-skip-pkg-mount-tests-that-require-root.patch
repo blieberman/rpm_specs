@@ -1,0 +1,64 @@
+Index: docker-17.04.0-ce-rc1/pkg/mount/sharedsubtree_linux_test.go
+===================================================================
+--- docker-17.04.0-ce-rc1.orig/pkg/mount/sharedsubtree_linux_test.go
++++ docker-17.04.0-ce-rc1/pkg/mount/sharedsubtree_linux_test.go
+@@ -11,6 +11,7 @@ import (
+ 
+ // nothing is propagated in or out
+ func TestSubtreePrivate(t *testing.T) {
++    t.Skip("not appropriate for a buildroot environment")
+ 	tmp := path.Join(os.TempDir(), "mount-tests")
+ 	if err := os.MkdirAll(tmp, 0777); err != nil {
+ 		t.Fatal(err)
+@@ -109,6 +110,7 @@ func TestSubtreePrivate(t *testing.T) {
+ // Testing that when a target is a shared mount,
+ // then child mounts propagate to the source
+ func TestSubtreeShared(t *testing.T) {
++    t.Skip("not appropriate for a buildroot environment")
+ 	tmp := path.Join(os.TempDir(), "mount-tests")
+ 	if err := os.MkdirAll(tmp, 0777); err != nil {
+ 		t.Fatal(err)
+@@ -177,6 +179,7 @@ func TestSubtreeShared(t *testing.T) {
+ // testing that mounts to a shared source show up in the slave target,
+ // and that mounts into a slave target do _not_ show up in the shared source
+ func TestSubtreeSharedSlave(t *testing.T) {
++    t.Skip("not appropriate for a buildroot environment")
+ 	tmp := path.Join(os.TempDir(), "mount-tests")
+ 	if err := os.MkdirAll(tmp, 0777); err != nil {
+ 		t.Fatal(err)
+@@ -281,6 +284,7 @@ func TestSubtreeSharedSlave(t *testing.T
+ }
+ 
+ func TestSubtreeUnbindable(t *testing.T) {
++    t.Skip("not appropriate for a buildroot environment")
+ 	tmp := path.Join(os.TempDir(), "mount-tests")
+ 	if err := os.MkdirAll(tmp, 0777); err != nil {
+ 		t.Fatal(err)
+Index: docker-17.04.0-ce-rc1/pkg/mount/mount_unix_test.go
+===================================================================
+--- docker-17.04.0-ce-rc1.orig/pkg/mount/mount_unix_test.go
++++ docker-17.04.0-ce-rc1/pkg/mount/mount_unix_test.go
+@@ -25,6 +25,7 @@ func TestMountOptionsParsing(t *testing.
+ }
+ 
+ func TestMounted(t *testing.T) {
++    t.Skip("not appropriate for a buildroot environment")
+ 	tmp := path.Join(os.TempDir(), "mount-tests")
+ 	if err := os.MkdirAll(tmp, 0777); err != nil {
+ 		t.Fatal(err)
+@@ -76,6 +77,7 @@ func TestMounted(t *testing.T) {
+ }
+ 
+ func TestMountReadonly(t *testing.T) {
++    t.Skip("not appropriate for a buildroot environment")
+ 	tmp := path.Join(os.TempDir(), "mount-tests")
+ 	if err := os.MkdirAll(tmp, 0777); err != nil {
+ 		t.Fatal(err)
+@@ -121,6 +123,7 @@ func TestMountReadonly(t *testing.T) {
+ }
+ 
+ func TestGetMounts(t *testing.T) {
++    t.Skip("not appropriate for a buildroot environment")
+ 	mounts, err := GetMounts()
+ 	if err != nil {
+ 		t.Fatal(err)

@@ -1,0 +1,13 @@
+diff --git a/contrib/init/sysvinit-redhat/docker b/contrib/init/sysvinit-redhat/docker
+index 40f9021..512acad 100755
+--- a/contrib/init/sysvinit-redhat/docker
++++ b/contrib/init/sysvinit-redhat/docker
+@@ -4,7 +4,7 @@
+ #
+ #       Daemon for docker.com
+ #
+-# chkconfig:   2345 95 95
++# chkconfig:   2345 95 05
+ # description: Daemon for docker.com
+ 
+ ### BEGIN INIT INFO

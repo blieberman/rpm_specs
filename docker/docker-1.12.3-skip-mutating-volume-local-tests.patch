@@ -1,0 +1,44 @@
+Index: docker-17.04.0-ce-rc1/volume/local/local_test.go
+===================================================================
+--- docker-17.04.0-ce-rc1.orig/volume/local/local_test.go
++++ docker-17.04.0-ce-rc1/volume/local/local_test.go
+@@ -29,6 +29,7 @@ func TestGetAddress(t *testing.T) {
+ }
+ 
+ func TestRemove(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	// TODO Windows: Investigate why this test fails on Windows under CI
+ 	//               but passes locally.
+ 	if runtime.GOOS == "windows" {
+@@ -76,6 +77,7 @@ func TestRemove(t *testing.T) {
+ }
+ 
+ func TestInitializeWithVolumes(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	rootDir, err := ioutil.TempDir("", "local-volume-test")
+ 	if err != nil {
+ 		t.Fatal(err)
+@@ -108,6 +110,7 @@ func TestInitializeWithVolumes(t *testin
+ }
+ 
+ func TestCreate(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	rootDir, err := ioutil.TempDir("", "local-volume-test")
+ 	if err != nil {
+ 		t.Fatal(err)
+@@ -180,6 +183,7 @@ func TestValidateName(t *testing.T) {
+ }
+ 
+ func TestCreateWithOpts(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	if runtime.GOOS == "windows" || runtime.GOOS == "solaris" {
+ 		t.Skip()
+ 	}
+@@ -286,6 +290,7 @@ func TestCreateWithOpts(t *testing.T) {
+ }
+ 
+ func TestRealodNoOpts(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	rootDir, err := ioutil.TempDir("", "volume-test-reload-no-opts")
+ 	if err != nil {
+ 		t.Fatal(err)

@@ -1,0 +1,13 @@
+Index: docker-17.04.0-ce-rc1/contrib/init/sysvinit-redhat/docker
+===================================================================
+--- docker-17.04.0-ce-rc1.orig/contrib/init/sysvinit-redhat/docker
++++ docker-17.04.0-ce-rc1/contrib/init/sysvinit-redhat/docker
+@@ -56,7 +56,7 @@ start() {
+ 		prestart
+ 		printf "Starting $prog:\t"
+ 		echo "\n$(date)\n" >> $logfile
+-		"$unshare" -m -- $exec $other_args >> $logfile 2>&1 &
++		"$unshare" -m -- nohup $exec $other_args >> $logfile 2>&1 &
+ 		pid=$!
+ 		touch $lockfile
+ 		# wait up to 10 seconds for the pidfile to exist.  see

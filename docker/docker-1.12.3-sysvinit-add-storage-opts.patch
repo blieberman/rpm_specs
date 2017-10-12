@@ -1,0 +1,29 @@
+Index: docker-17.04.0-ce-rc1/contrib/init/sysvinit-redhat/docker
+===================================================================
+--- docker-17.04.0-ce-rc1.orig/contrib/init/sysvinit-redhat/docker
++++ docker-17.04.0-ce-rc1/contrib/init/sysvinit-redhat/docker
+@@ -30,6 +30,15 @@ lockfile="/var/lock/subsys/$prog"
+ logfile="/var/log/$prog"
+ 
+ [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
++[ -e /etc/sysconfig/${prog}-storage ] && . /etc/sysconfig/${prog}-storage
++
++# Additional start options for the Docker daemon can
++# be defined in the $OPTIONS variable in /etc/sysconfig/docker,
++# which is also the variable name referenced by the systemd unit.
++# If $OPTIONS is not defined, we set it to the value of $other_args,
++# which is the variable name expected by the upstream sysvinit script.
++OPTIONS="${OPTIONS:-${other_args}}"
++
+ 
+ prestart() {
+ 	service cgconfig status > /dev/null
+@@ -56,7 +65,7 @@ start() {
+ 		prestart
+ 		printf "Starting $prog:\t"
+ 		echo "\n$(date)\n" >> $logfile
+-		"$unshare" -m -- nohup $exec $other_args >> $logfile 2>&1 &
++		"$unshare" -m -- nohup $exec ${OPTIONS} ${DOCKER_STORAGE_OPTIONS} >> $logfile 2>&1 &
+ 		pid=$!
+ 		touch $lockfile
+ 		# wait up to 10 seconds for the pidfile to exist.  see

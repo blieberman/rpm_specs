@@ -1,0 +1,19 @@
+Index: docker-17.03.2-ce/runc-54296cf40ad8143b62dbcaa1d90e520a2136ddfe/Makefile
+===================================================================
+--- docker-17.03.2-ce.orig/runc-54296cf40ad8143b62dbcaa1d90e520a2136ddfe/Makefile
++++ docker-17.03.2-ce/runc-54296cf40ad8143b62dbcaa1d90e520a2136ddfe/Makefile
+@@ -10,8 +10,12 @@ RUNC_IMAGE := runc_dev$(if $(GIT_BRANCH_
+ PROJECT := github.com/opencontainers/runc
+ TEST_DOCKERFILE := script/test_Dockerfile
+ BUILDTAGS := seccomp
+-COMMIT_NO := $(shell git rev-parse HEAD 2> /dev/null || true)
+-COMMIT := $(if $(shell git status --porcelain --untracked-files=no),"${COMMIT_NO}-dirty","${COMMIT_NO}")
++ifeq ($(GIT_COMMIT_OVERRIDE),)
++       COMMIT_NO := $(shell git rev-parse HEAD 2> /dev/null || true)
++       COMMIT := $(if $(shell git status --porcelain --untracked-files=no),"${COMMIT_NO}-dirty","${COMMIT_NO}")
++else
++       COMMIT := $(GIT_COMMIT_OVERRIDE)
++endif
+ RUNC_LINK := $(CURDIR)/Godeps/_workspace/src/github.com/opencontainers/runc
+ export GOPATH := $(CURDIR)/Godeps/_workspace
+ 

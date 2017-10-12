@@ -1,0 +1,26 @@
+Index: docker-17.04.0-ce-rc1/contrib/init/sysvinit-redhat/docker
+===================================================================
+--- docker-17.04.0-ce-rc1.orig/contrib/init/sysvinit-redhat/docker
++++ docker-17.04.0-ce-rc1/contrib/init/sysvinit-redhat/docker
+@@ -41,6 +41,9 @@ logfile="/var/log/$prog"
+ # which is the variable name expected by the upstream sysvinit script.
+ OPTIONS="${OPTIONS:-${other_args}}"
+ 
++# How many seconds to wait for the pidfile to appear after starting the daemon.
++# The default value from upstream is 10.
++DAEMON_PIDFILE_TIMEOUT="${DAEMON_PIDFILE_TIMEOUT:-10}"
+ 
+ prestart() {
+ 	service cgconfig status > /dev/null
+@@ -70,10 +73,8 @@ start() {
+ 		"$unshare" -m -- nohup $exec ${OPTIONS} ${DOCKER_STORAGE_OPTIONS} >> $logfile 2>&1 &
+ 		pid=$!
+ 		touch $lockfile
+-		# wait up to 10 seconds for the pidfile to exist.  see
+-		# https://github.com/docker/docker/issues/5359
+ 		tries=0
+-		while [ ! -f $pidfile -a $tries -lt 10 ]; do
++		while [ ! -f $pidfile -a $tries -lt ${DAEMON_PIDFILE_TIMEOUT} ]; do
+ 			sleep 1
+ 			tries=$((tries + 1))
+ 			echo -n '.'

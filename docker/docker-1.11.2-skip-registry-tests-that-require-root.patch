@@ -1,0 +1,12 @@
+Index: docker-17.04.0-ce-rc1/registry/registry_test.go
+===================================================================
+--- docker-17.04.0-ce-rc1.orig/registry/registry_test.go
++++ docker-17.04.0-ce-rc1/registry/registry_test.go
+@@ -655,6 +655,7 @@ func TestNewIndexInfo(t *testing.T) {
+ }
+ 
+ func TestMirrorEndpointLookup(t *testing.T) {
++    t.Skip("not appropriate for a buildroot environment")
+ 	containsMirror := func(endpoints []APIEndpoint) bool {
+ 		for _, pe := range endpoints {
+ 			if pe.URL.Host == "my.mirror" {

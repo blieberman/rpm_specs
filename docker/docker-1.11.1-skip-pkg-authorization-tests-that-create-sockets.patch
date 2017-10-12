@@ -1,0 +1,28 @@
+Index: docker-17.04.0-ce-rc1/pkg/authorization/authz_unix_test.go
+===================================================================
+--- docker-17.04.0-ce-rc1.orig/pkg/authorization/authz_unix_test.go
++++ docker-17.04.0-ce-rc1/pkg/authorization/authz_unix_test.go
+@@ -28,6 +28,7 @@ const (
+ )
+ 
+ func TestAuthZRequestPluginError(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	server := authZPluginTestServer{t: t}
+ 	server.start()
+ 	defer server.stop()
+@@ -59,6 +60,7 @@ func TestAuthZRequestPluginError(t *test
+ }
+ 
+ func TestAuthZRequestPlugin(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	server := authZPluginTestServer{t: t}
+ 	server.start()
+ 	defer server.stop()
+@@ -91,6 +93,7 @@ func TestAuthZRequestPlugin(t *testing.T
+ }
+ 
+ func TestAuthZResponsePlugin(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	server := authZPluginTestServer{t: t}
+ 	server.start()
+ 	defer server.stop()

@@ -1,0 +1,81 @@
+Index: docker-17.03.1-ce/daemon/graphdriver/devmapper/devmapper_test.go
+===================================================================
+--- docker-17.03.1-ce.orig/daemon/graphdriver/devmapper/devmapper_test.go
++++ docker-17.03.1-ce/daemon/graphdriver/devmapper/devmapper_test.go
+@@ -11,50 +11,58 @@ import (
+ 	"github.com/docker/docker/daemon/graphdriver/graphtest"
+ )
+ 
+-func init() {
+-	// Reduce the size the the base fs and loopback for the tests
+-	defaultDataLoopbackSize = 300 * 1024 * 1024
+-	defaultMetaDataLoopbackSize = 200 * 1024 * 1024
+-	defaultBaseFsSize = 300 * 1024 * 1024
+-	defaultUdevSyncOverride = true
+-	if err := graphtest.InitLoopbacks(); err != nil {
+-		panic(err)
+-	}
+-}
++// func init() {
++// 	// Reduce the size the the base fs and loopback for the tests
++// 	defaultDataLoopbackSize = 300 * 1024 * 1024
++// 	defaultMetaDataLoopbackSize = 200 * 1024 * 1024
++// 	defaultBaseFsSize = 300 * 1024 * 1024
++// 	defaultUdevSyncOverride = true
++// 	if err := graphtest.InitLoopbacks(); err != nil {
++// 		panic(err)
++// 	}
++// }
+ 
+ // This avoids creating a new driver for each test if all tests are run
+ // Make sure to put new tests between TestDevmapperSetup and TestDevmapperTeardown
+ func TestDevmapperSetup(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	graphtest.GetDriver(t, "devicemapper")
+ }
+ 
+ func TestDevmapperCreateEmpty(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	graphtest.DriverTestCreateEmpty(t, "devicemapper")
+ }
+ 
+ func TestDevmapperCreateBase(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	graphtest.DriverTestCreateBase(t, "devicemapper")
+ }
+ 
+ func TestDevmapperCreateSnap(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	graphtest.DriverTestCreateSnap(t, "devicemapper")
+ }
+ 
+ func TestDevmapperTeardown(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	graphtest.PutDriver(t)
+ }
+ 
+ func TestDevmapperReduceLoopBackSize(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	tenMB := int64(10 * 1024 * 1024)
+ 	testChangeLoopBackSize(t, -tenMB, defaultDataLoopbackSize, defaultMetaDataLoopbackSize)
+ }
+ 
+ func TestDevmapperIncreaseLoopBackSize(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	tenMB := int64(10 * 1024 * 1024)
+ 	testChangeLoopBackSize(t, tenMB, defaultDataLoopbackSize+tenMB, defaultMetaDataLoopbackSize+tenMB)
+ }
+ 
+ func testChangeLoopBackSize(t *testing.T, delta, expectDataSize, expectMetaDataSize int64) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	driver := graphtest.GetDriver(t, "devicemapper").(*graphtest.Driver).Driver.(*graphdriver.NaiveDiffDriver).ProtoDriver.(*Driver)
+ 	defer graphtest.PutDriver(t)
+ 	// make sure data or metadata loopback size are the default size
+@@ -83,6 +91,7 @@ func testChangeLoopBackSize(t *testing.T
+ 
+ // Make sure devices.Lock() has been release upon return from cleanupDeletedDevices() function
+ func TestDevmapperLockReleasedDeviceDeletion(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	driver := graphtest.GetDriver(t, "devicemapper").(*graphtest.Driver).Driver.(*graphdriver.NaiveDiffDriver).ProtoDriver.(*Driver)
+ 	defer graphtest.PutDriver(t)
+ 

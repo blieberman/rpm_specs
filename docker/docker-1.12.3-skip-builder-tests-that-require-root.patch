@@ -1,0 +1,72 @@
+Index: docker-17.03.1-ce/builder/remote_test.go
+===================================================================
+--- docker-17.03.1-ce.orig/builder/remote_test.go
++++ docker-17.03.1-ce/builder/remote_test.go
+@@ -152,6 +152,7 @@ func TestInspectResponseEmptyContentType
+ }
+ 
+ func TestMakeRemoteContext(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	contextDir, cleanup := createTestTempDir(t, "", "builder-tarsum-test")
+ 	defer cleanup()
+ 
+Index: docker-17.03.1-ce/builder/dockerfile/evaluator_test.go
+===================================================================
+--- docker-17.03.1-ce.orig/builder/dockerfile/evaluator_test.go
++++ docker-17.03.1-ce/builder/dockerfile/evaluator_test.go
+@@ -131,6 +131,7 @@ func initDispatchTestCases() []dispatchT
+ }
+ 
+ func TestDispatch(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	testCases := initDispatchTestCases()
+ 
+ 	for _, testCase := range testCases {
+Index: docker-17.03.1-ce/builder/dockerfile/internals_test.go
+===================================================================
+--- docker-17.03.1-ce.orig/builder/dockerfile/internals_test.go
++++ docker-17.03.1-ce/builder/dockerfile/internals_test.go
+@@ -11,6 +11,7 @@ import (
+ )
+ 
+ func TestEmptyDockerfile(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	contextDir, cleanup := createTestTempDir(t, "", "builder-dockerfile-test")
+ 	defer cleanup()
+ 
+@@ -20,6 +21,7 @@ func TestEmptyDockerfile(t *testing.T) {
+ }
+ 
+ func TestSymlinkDockerfile(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	contextDir, cleanup := createTestTempDir(t, "", "builder-dockerfile-test")
+ 	defer cleanup()
+ 
+@@ -35,6 +37,7 @@ func TestSymlinkDockerfile(t *testing.T)
+ }
+ 
+ func TestDockerfileOutsideTheBuildContext(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	contextDir, cleanup := createTestTempDir(t, "", "builder-dockerfile-test")
+ 	defer cleanup()
+ 
+@@ -44,6 +47,7 @@ func TestDockerfileOutsideTheBuildContex
+ }
+ 
+ func TestNonExistingDockerfile(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	contextDir, cleanup := createTestTempDir(t, "", "builder-dockerfile-test")
+ 	defer cleanup()
+ 
+Index: docker-17.03.1-ce/builder/tarsum_test.go
+===================================================================
+--- docker-17.03.1-ce.orig/builder/tarsum_test.go
++++ docker-17.03.1-ce/builder/tarsum_test.go
+@@ -193,6 +193,7 @@ func TestRemoveDirectory(t *testing.T) {
+ }
+ 
+ func TestMakeTarSumContext(t *testing.T) {
++	t.Skip("not appropriate for a buildroot environment")
+ 	contextDir, cleanup := createTestTempDir(t, "", "builder-tarsum-test")
+ 	defer cleanup()
+ 

@@ -1,0 +1,13 @@
+Index: docker-17.04.0-ce-rc1/contrib/init/sysvinit-redhat/docker
+===================================================================
+--- docker-17.04.0-ce-rc1.orig/contrib/init/sysvinit-redhat/docker
++++ docker-17.04.0-ce-rc1/contrib/init/sysvinit-redhat/docker
+@@ -32,6 +32,8 @@ logfile="/var/log/$prog"
+ [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
+ [ -e /etc/sysconfig/${prog}-storage ] && . /etc/sysconfig/${prog}-storage
+ 
++[ -n "${DAEMON_MAXFILES}" ] && ulimit -n "${DAEMON_MAXFILES}"
++
+ # Additional start options for the Docker daemon can
+ # be defined in the $OPTIONS variable in /etc/sysconfig/docker,
+ # which is also the variable name referenced by the systemd unit.
